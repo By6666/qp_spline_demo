@@ -1,0 +1,3 @@
+--flagfile=./qp_spline_speed/qp_spline_speed_config.gflagsfile
+--log_dir=./log
+--v=2

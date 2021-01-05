@@ -3,11 +3,13 @@
 #include <vector>
 #include <iostream>
 
+#include "common/log.h"
 #include "math_spline/spline_1d_generator.h"
 
 // #include "common/log.h"
 
 // build cmd : g++ glog_test.cpp -lglog -lgflags -lpthread
+// run cmd : ./build/exe.o --flagfile=config.gflagsfile
 
 using namespace apollo::planning;
 
@@ -19,8 +21,8 @@ int main(int argc, char* argv[]) {
   google::InstallFailureSignalHandler();
 
   // if (VLOG_IS_ON(4)) std::cout << "vlog ON !!" << std::endl;
-  // LOG(INFO) << "Found cookies" << std::endl;
-  // VLOG(2) << "白洋vlog test !!" << std::endl;
+  LOG(INFO) << "Found cookies" << std::endl;
+  VLOG(2) << "白洋vlog test !!" << std::endl;
 
   // starting point
   std::vector<double> x_knots{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -58,6 +60,18 @@ int main(int argc, char* argv[]) {
   pg.Solve();
   // extract parameters
   auto params = pg.spline();
+
+  const double t_output_resolution = 0.5;
+  double time = 0.0;
+  while (time < 8.0 + t_output_resolution) {
+    double s = params(time);
+    double v = std::max(0.0, params.Derivative(time));
+    double a = params.SecondOrderDerivative(time);
+    double da = params.ThirdOrderDerivative(time);
+
+    AERROR << "[s, v, a, j] ==> [" << s << ", " << v << ", " << a << ", " << da << "]";
+    time += t_output_resolution;
+  }
 
   return 0;
 }

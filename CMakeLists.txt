@@ -9,7 +9,7 @@ set(CMAKE_CXX_COMPILER "g++")
 add_definitions(-std=c++11)
 
 include_directories(${CMAKE_SOURCE_DIR})
-link_directories(/usr/local/qpOASES/libs)
+# link_directories(/usr/local/qpOASES/libs)
 
 add_subdirectory(common)
 add_subdirectory(math_spline)
